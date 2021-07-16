@@ -342,7 +342,7 @@ class FlutterLogin extends StatefulWidget {
   };
 
   static final FormFieldValidator<String> defaultPasswordValidator = (value) {
-    if (value!.isEmpty || value.length <= 6) {
+    if (value!.isEmpty || value.length <= 5) {
       return '密码长度过短!';
     }
     return null;
