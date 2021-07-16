@@ -1,30 +1,33 @@
 library flutter_login;
 
 import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter/foundation.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter_login/src/models/login_user_type.dart';
 import 'package:provider/provider.dart';
-import 'src/providers/login_theme.dart';
-import 'src/widgets/null_widget.dart';
-import 'theme.dart';
-import 'src/dart_helper.dart';
+
 import 'src/color_helper.dart';
+import 'src/constants.dart';
+import 'src/dart_helper.dart';
 import 'src/providers/auth.dart';
 import 'src/providers/login_messages.dart';
+import 'src/providers/login_theme.dart';
 import 'src/regex.dart';
 import 'src/widgets/auth_card.dart';
 import 'src/widgets/fade_in.dart';
-import 'src/widgets/hero_text.dart';
 import 'src/widgets/gradient_box.dart';
+import 'src/widgets/hero_text.dart';
+import 'src/widgets/null_widget.dart';
+import 'theme.dart';
+
 export 'src/models/login_data.dart';
 export 'src/models/login_user_type.dart';
 export 'src/providers/login_messages.dart';
 export 'src/providers/login_theme.dart';
-import 'src/constants.dart';
 
 class LoginProvider {
   final IconData icon;
@@ -246,6 +249,9 @@ class FlutterLogin extends StatefulWidget {
       this.hideSignUpButton = false,
       this.loginAfterSignUp = true,
       this.footer,
+      this.minimumPasswordLength = 6,
+      this.passwordTooShortHint = 'Password too short!',
+      this.invalidEmailHint = 'Invalid email!',
       this.hideProvidersTitle = false})
       : super(key: key);
 
@@ -319,19 +325,25 @@ class FlutterLogin extends StatefulWidget {
   /// Optional footer text for example a copyright notice
   final String? footer;
 
+  final int minimumPasswordLength;
+
+  final String passwordTooShortHint;
+
+  final String invalidEmailHint;
+
   /// Hide the title above the login providers. If no providers are set this is uneffective
   final bool hideProvidersTitle;
 
   static final FormFieldValidator<String> defaultEmailValidator = (value) {
     if (value!.isEmpty || !Regex.email.hasMatch(value)) {
-      return 'Invalid email!';
+      return '请输入有效邮箱!';
     }
     return null;
   };
 
   static final FormFieldValidator<String> defaultPasswordValidator = (value) {
-    if (value!.isEmpty || value.length <= 2) {
-      return 'Password is too short!';
+    if (value!.isEmpty || value.length <= 6) {
+      return '密码长度过短!';
     }
     return null;
   };
