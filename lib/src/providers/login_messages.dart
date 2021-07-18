@@ -33,7 +33,7 @@ class LoginMessages with ChangeNotifier {
   static const defaultConfirmPasswordError = 'Password do not match!';
   static const defaultRecoverPasswordSuccess = 'An email has been sent';
   static const defaultflushbarTitleSuccess = 'Success';
-  static const defaultflushbarTitleError = 'Error';
+  static const defaultflushbarTitleError = '错误';
   static const defaultSignUpSuccess = 'An activation link has been sent';
   static const defaultProvidersTitle = 'or login with';
 
