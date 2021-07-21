@@ -465,9 +465,12 @@ class _TimerButtonState extends State<TimerButton> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget._loginTheme!.inputTheme.focusColor);
-    var _buttonColor =
-        _hasFocus ? widget._loginTheme!.primaryColor : Colors.white;
+    Color _buttonColor;
+    if (_hasFocus) {
+      _buttonColor = Theme.of(context).primaryColor;
+    } else {
+      _buttonColor = Color(0xFF858488);
+    }
     return ArgonTimerButton(
       elevation: 0,
       height: 25,
