@@ -449,6 +449,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
               ],
             ),
           ),
+          // Expanded area when sign up is clicked.
           ExpandableContainer(
             backgroundColor: theme.accentColor,
             controller: _switchAuthController,
