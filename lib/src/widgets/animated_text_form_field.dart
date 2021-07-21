@@ -469,7 +469,7 @@ class _TimerButtonState extends State<TimerButton> {
     if (_hasFocus) {
       _buttonColor = Theme.of(context).primaryColor;
     } else {
-      _buttonColor = Color(0xFF858488);
+      _buttonColor = Color(0xFF838589);
     }
     return ArgonTimerButton(
       elevation: 0,
