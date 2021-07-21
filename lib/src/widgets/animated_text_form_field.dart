@@ -5,6 +5,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../flutter_login.dart';
+
 enum TextFieldInertiaDirection {
   left,
   right,
@@ -370,6 +372,7 @@ class AnimatedEmailFormField extends StatefulWidget {
     this.onFieldSubmitted,
     this.onSaved,
     this.autofillHints,
+    this.loginTheme,
   })  : assert((inertiaController == null && inertiaDirection == null) ||
             (inertiaController != null && inertiaDirection != null)),
         super(key: key);
@@ -389,6 +392,7 @@ class AnimatedEmailFormField extends StatefulWidget {
   final FormFieldSetter<String>? onSaved;
   final TextFieldInertiaDirection? inertiaDirection;
   final Iterable<String>? autofillHints;
+  final LoginTheme? loginTheme;
 
   @override
   _AnimatedEmailFormFieldState createState() => _AnimatedEmailFormFieldState();
@@ -407,32 +411,10 @@ class _AnimatedEmailFormFieldState extends State<AnimatedEmailFormField> {
       labelText: widget.labelText,
       prefixIcon: Icon(FontAwesomeIcons.solidEnvelope, size: 20),
       suffixIcon: GestureDetector(
-          onTap: () => {},
-          dragStartBehavior: DragStartBehavior.down,
-          child: ArgonTimerButton(
-            elevation: 0,
-            height: 25,
-            minWidth: 1,
-            width: 25,
-            color: Colors.transparent,
-            focusColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            disabledColor: Colors.transparent,
-            borderRadius: 0,
-            loader: (timeLeft) {
-              return Text(
-                '$timeLeft s',
-                style: TextStyle(),
-              );
-            },
-            roundLoadingShape: false,
-            onTap: (startTimer, btnState) {
-              if (btnState == ButtonState.Idle) {
-                startTimer(3);
-              }
-            },
-            child: Icon(Icons.refresh, size: 25),
-          )),
+        onTap: () => {},
+        dragStartBehavior: DragStartBehavior.down,
+        child: TimerButton(widget.focusNode, widget.loginTheme),
+      ),
       keyboardType: widget.keyboardType,
       textInputAction: widget.textInputAction,
       controller: widget.controller,
@@ -441,6 +423,76 @@ class _AnimatedEmailFormFieldState extends State<AnimatedEmailFormField> {
       onFieldSubmitted: widget.onFieldSubmitted,
       onSaved: widget.onSaved,
       inertiaDirection: widget.inertiaDirection,
+    );
+  }
+}
+
+class TimerButton extends StatefulWidget {
+  final _focusNode;
+  final LoginTheme? _loginTheme;
+
+  const TimerButton(this._focusNode, this._loginTheme, {Key? key})
+      : super(key: key);
+
+  @override
+  _TimerButtonState createState() => _TimerButtonState(_focusNode);
+}
+
+class _TimerButtonState extends State<TimerButton> {
+  final FocusNode _focusNode;
+  bool _hasFocus = false;
+  var _listener;
+
+  _TimerButtonState(this._focusNode);
+
+  @override
+  void initState() {
+    print(_focusNode);
+    super.initState();
+    _listener = () {
+      setState(() {
+        _hasFocus = _focusNode.hasFocus;
+      });
+    };
+    _focusNode.addListener(_listener);
+  }
+
+  @override
+  void dispose() {
+    _focusNode.removeListener(_listener);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print(widget._loginTheme!.inputTheme.focusColor);
+    var _buttonColor =
+        _hasFocus ? widget._loginTheme!.primaryColor : Colors.white;
+    return ArgonTimerButton(
+      elevation: 0,
+      height: 25,
+      minWidth: 1,
+      width: 25,
+      color: Colors.transparent,
+      focusColor: Colors.transparent,
+      splashColor: Colors.transparent,
+      disabledColor: Colors.transparent,
+      borderRadius: 0,
+      loader: (timeLeft) {
+        return Text(
+          '${timeLeft}秒',
+          style: TextStyle(
+            color: _buttonColor,
+          ),
+        );
+      },
+      roundLoadingShape: false,
+      onTap: (startTimer, btnState) {
+        if (btnState == ButtonState.Idle) {
+          startTimer(3);
+        }
+      },
+      child: Icon(Icons.refresh, size: 25, color: _buttonColor),
     );
   }
 }

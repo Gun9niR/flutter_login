@@ -323,7 +323,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
   }
 
   Widget _buildConfirmEmailField(
-      double width, LoginMessages messages, Auth auth) {
+      double width, LoginMessages messages, Auth auth, LoginTheme loginTheme) {
     return AnimatedEmailFormField(
       animatedWidth: width,
       enabled: auth.isSignup,
@@ -335,6 +335,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       textInputAction: TextInputAction.done,
       focusNode: _emailConfirmationFocusNode,
       onFieldSubmitted: (value) => _submit(),
+      loginTheme: loginTheme,
     );
   }
 
@@ -505,7 +506,8 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
               vertical: 10,
             ),
             onExpandCompleted: () => _postSwitchAuthController.forward(),
-            child: _buildConfirmEmailField(textFieldWidth, messages, auth),
+            child: _buildConfirmEmailField(
+                textFieldWidth, messages, auth, loginTheme),
           ),
           Container(
             padding: Paddings.fromRBL(cardPadding),
