@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -339,6 +340,99 @@ class _AnimatedPasswordTextFormFieldState
         ),
       ),
       obscureText: _obscureText,
+      keyboardType: widget.keyboardType,
+      textInputAction: widget.textInputAction,
+      controller: widget.controller,
+      focusNode: widget.focusNode,
+      validator: widget.validator,
+      onFieldSubmitted: widget.onFieldSubmitted,
+      onSaved: widget.onSaved,
+      inertiaDirection: widget.inertiaDirection,
+    );
+  }
+}
+
+class AnimatedEmailFormField extends StatefulWidget {
+  const AnimatedEmailFormField({
+    Key? key,
+    this.interval = const Interval(0.0, 1.0),
+    required this.animatedWidth,
+    this.loadingController,
+    this.inertiaController,
+    this.inertiaDirection,
+    this.enabled = true,
+    this.labelText,
+    this.keyboardType,
+    this.textInputAction,
+    this.controller,
+    this.focusNode,
+    this.validator,
+    this.onFieldSubmitted,
+    this.onSaved,
+    this.autofillHints,
+  })  : assert((inertiaController == null && inertiaDirection == null) ||
+            (inertiaController != null && inertiaDirection != null)),
+        super(key: key);
+
+  final Interval? interval;
+  final AnimationController? loadingController;
+  final AnimationController? inertiaController;
+  final double animatedWidth;
+  final bool enabled;
+  final String? labelText;
+  final TextInputType? keyboardType;
+  final TextInputAction? textInputAction;
+  final TextEditingController? controller;
+  final FocusNode? focusNode;
+  final FormFieldValidator<String>? validator;
+  final ValueChanged<String>? onFieldSubmitted;
+  final FormFieldSetter<String>? onSaved;
+  final TextFieldInertiaDirection? inertiaDirection;
+  final Iterable<String>? autofillHints;
+
+  @override
+  _AnimatedEmailFormFieldState createState() => _AnimatedEmailFormFieldState();
+}
+
+class _AnimatedEmailFormFieldState extends State<AnimatedEmailFormField> {
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedTextFormField(
+      interval: widget.interval,
+      loadingController: widget.loadingController,
+      inertiaController: widget.inertiaController,
+      width: widget.animatedWidth,
+      enabled: widget.enabled,
+      autofillHints: widget.autofillHints,
+      labelText: widget.labelText,
+      prefixIcon: Icon(FontAwesomeIcons.solidEnvelope, size: 20),
+      suffixIcon: GestureDetector(
+          onTap: () => {},
+          dragStartBehavior: DragStartBehavior.down,
+          child: ArgonTimerButton(
+            elevation: 0,
+            height: 25,
+            minWidth: 1,
+            width: 25,
+            color: Colors.transparent,
+            focusColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            disabledColor: Colors.transparent,
+            borderRadius: 0,
+            loader: (timeLeft) {
+              return Text(
+                '$timeLeft s',
+                style: TextStyle(),
+              );
+            },
+            roundLoadingShape: false,
+            onTap: (startTimer, btnState) {
+              if (btnState == ButtonState.Idle) {
+                startTimer(3);
+              }
+            },
+            child: Icon(Icons.refresh, size: 25),
+          )),
       keyboardType: widget.keyboardType,
       textInputAction: widget.textInputAction,
       controller: widget.controller,

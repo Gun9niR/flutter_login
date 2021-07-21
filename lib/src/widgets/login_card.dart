@@ -37,10 +37,12 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
 
   final _passwordFocusNode = FocusNode();
   final _confirmPasswordFocusNode = FocusNode();
+  final _emailConfirmationFocusNode = FocusNode();
 
   TextEditingController? _nameController;
   TextEditingController? _passController;
   TextEditingController? _confirmPassController;
+  TextEditingController? _emailConfirmationController;
 
   var _isLoading = false;
   var _isSubmitting = false;
@@ -70,6 +72,8 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     _nameController = TextEditingController(text: auth.email);
     _passController = TextEditingController(text: auth.password);
     _confirmPassController = TextEditingController(text: auth.confirmPassword);
+    _emailConfirmationController =
+        TextEditingController(text: auth.emailConfirmation);
 
     _loadingController = widget.loadingController ??
         (AnimationController(
@@ -126,6 +130,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     _loadingController.removeStatusListener(handleLoadingAnimationStatus);
     _passwordFocusNode.dispose();
     _confirmPasswordFocusNode.dispose();
+    _emailConfirmationFocusNode.dispose();
 
     _switchAuthController.dispose();
     _postSwitchAuthController.dispose();
@@ -175,6 +180,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       error = await auth.onSignup!(LoginData(
         name: auth.email,
         password: auth.password,
+        emailConfirmation: auth.emailConfirmation,
       ));
     }
 
@@ -187,6 +193,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     await _submitController.reverse();
 
     if (!DartHelper.isNullOrEmpty(error)) {
+      // !! Where error message appears.
       showErrorToast(context, messages.flushbarTitleError, error!);
       Future.delayed(const Duration(milliseconds: 271), () {
         setState(() => _showShadow = true);
@@ -300,7 +307,9 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       controller: _confirmPassController,
       textInputAction: TextInputAction.done,
       focusNode: _confirmPasswordFocusNode,
-      onFieldSubmitted: (value) => _submit(),
+      onFieldSubmitted: (value) {
+        FocusScope.of(context).requestFocus(_emailConfirmationFocusNode);
+      },
       validator: auth.isSignup
           ? (value) {
               if (value != _passController!.text) {
@@ -310,6 +319,22 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
             }
           : (value) => null,
       onSaved: (value) => auth.confirmPassword = value!,
+    );
+  }
+
+  Widget _buildConfirmEmailField(
+      double width, LoginMessages messages, Auth auth) {
+    return AnimatedEmailFormField(
+      animatedWidth: width,
+      enabled: auth.isSignup,
+      loadingController: _loadingController,
+      inertiaController: _postSwitchAuthController,
+      inertiaDirection: TextFieldInertiaDirection.right,
+      labelText: '邮箱验证码',
+      controller: _emailConfirmationController,
+      textInputAction: TextInputAction.done,
+      focusNode: _emailConfirmationFocusNode,
+      onFieldSubmitted: (value) => _submit(),
     );
   }
 
@@ -465,6 +490,22 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
             ),
             onExpandCompleted: () => _postSwitchAuthController.forward(),
             child: _buildConfirmPasswordField(textFieldWidth, messages, auth),
+          ),
+          ExpandableContainer(
+            backgroundColor: theme.accentColor,
+            controller: _switchAuthController,
+            initialState: isLogin
+                ? ExpandableContainerState.shrunk
+                : ExpandableContainerState.expanded,
+            alignment: Alignment.topLeft,
+            color: theme.cardTheme.color,
+            width: cardWidth,
+            padding: EdgeInsets.symmetric(
+              horizontal: cardPadding,
+              vertical: 10,
+            ),
+            onExpandCompleted: () => _postSwitchAuthController.forward(),
+            child: _buildConfirmEmailField(textFieldWidth, messages, auth),
           ),
           Container(
             padding: Paddings.fromRBL(cardPadding),

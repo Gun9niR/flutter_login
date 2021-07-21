@@ -13,6 +13,7 @@ dependencies:
   provider: ^5.0.0
   another_transformer_page_view: ^1.0.1
   another_flushbar: ^1.10.23
+  argon_buttons_flutter: ^1.1.0
 
   # flutter_test from sdk depends on quiver
   quiver: ^3.0.1
