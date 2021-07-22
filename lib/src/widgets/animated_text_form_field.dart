@@ -373,6 +373,8 @@ class AnimatedEmailFormField extends StatefulWidget {
     this.onSaved,
     this.autofillHints,
     this.loginTheme,
+    this.emailRetryInterval,
+    this.onSend,
   })  : assert((inertiaController == null && inertiaDirection == null) ||
             (inertiaController != null && inertiaDirection != null)),
         super(key: key);
@@ -393,6 +395,8 @@ class AnimatedEmailFormField extends StatefulWidget {
   final TextFieldInertiaDirection? inertiaDirection;
   final Iterable<String>? autofillHints;
   final LoginTheme? loginTheme;
+  final emailRetryInterval;
+  final onSend;
 
   @override
   _AnimatedEmailFormFieldState createState() => _AnimatedEmailFormFieldState();
@@ -413,7 +417,8 @@ class _AnimatedEmailFormFieldState extends State<AnimatedEmailFormField> {
       suffixIcon: GestureDetector(
         onTap: () => {},
         dragStartBehavior: DragStartBehavior.down,
-        child: TimerButton(widget.focusNode, widget.loginTheme),
+        child: TimerButton(
+            widget.focusNode, widget.emailRetryInterval, widget.onSend),
       ),
       keyboardType: widget.keyboardType,
       textInputAction: widget.textInputAction,
@@ -429,9 +434,11 @@ class _AnimatedEmailFormFieldState extends State<AnimatedEmailFormField> {
 
 class TimerButton extends StatefulWidget {
   final _focusNode;
-  final LoginTheme? _loginTheme;
+  final _emailRetryInterval;
+  final _onSend;
 
-  const TimerButton(this._focusNode, this._loginTheme, {Key? key})
+  const TimerButton(this._focusNode, this._emailRetryInterval, this._onSend,
+      {Key? key})
       : super(key: key);
 
   @override
@@ -492,10 +499,11 @@ class _TimerButtonState extends State<TimerButton> {
       roundLoadingShape: false,
       onTap: (startTimer, btnState) {
         if (btnState == ButtonState.Idle) {
-          startTimer(3);
+          startTimer(widget._emailRetryInterval);
+          widget._onSend();
         }
       },
-      child: Icon(Icons.refresh, size: 25, color: _buttonColor),
+      child: Icon(Icons.send, size: 25, color: _buttonColor),
     );
   }
 }

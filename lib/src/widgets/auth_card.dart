@@ -44,6 +44,8 @@ class AuthCard extends StatefulWidget {
     this.hideSignUpButton = false,
     this.loginAfterSignUp = true,
     this.hideProvidersTitle = false,
+    @required this.emailRetryInterval,
+    @required this.onSend,
   }) : super(key: key);
 
   final EdgeInsets padding;
@@ -57,6 +59,8 @@ class AuthCard extends StatefulWidget {
   final bool loginAfterSignUp;
   final LoginUserType userType;
   final bool hideProvidersTitle;
+  final emailRetryInterval;
+  final onSend;
 
   @override
   AuthCardState createState() => AuthCardState();

@@ -252,7 +252,9 @@ class FlutterLogin extends StatefulWidget {
       this.minimumPasswordLength = 6,
       this.passwordTooShortHint = 'Password too short!',
       this.invalidEmailHint = 'Invalid email!',
-      this.hideProvidersTitle = false})
+      this.hideProvidersTitle = false,
+      this.emailRetryInterval = 5,
+      @required this.onSend})
       : super(key: key);
 
   /// Called when the user hit the submit button when in sign up mode
@@ -330,6 +332,10 @@ class FlutterLogin extends StatefulWidget {
   final String passwordTooShortHint;
 
   final String invalidEmailHint;
+
+  final int emailRetryInterval;
+
+  final onSend;
 
   /// Hide the title above the login providers. If no providers are set this is uneffective
   final bool hideProvidersTitle;
@@ -669,6 +675,8 @@ class _FlutterLoginState extends State<FlutterLogin>
                             widget.hideForgotPasswordButton,
                         loginAfterSignUp: widget.loginAfterSignUp,
                         hideProvidersTitle: widget.hideProvidersTitle,
+                        emailRetryInterval: widget.emailRetryInterval,
+                        onSend: widget.onSend,
                       ),
                     ),
                     Positioned(

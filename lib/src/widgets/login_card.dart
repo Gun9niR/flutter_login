@@ -13,7 +13,9 @@ class _LoginCard extends StatefulWidget {
       this.hideForgotPasswordButton = false,
       this.hideSignUpButton = false,
       this.loginAfterSignUp = true,
-      this.hideProvidersTitle = false})
+      this.hideProvidersTitle = false,
+      this.emailRetryInterval,
+      this.onSend})
       : super(key: key);
 
   final AnimationController? loadingController;
@@ -27,6 +29,8 @@ class _LoginCard extends StatefulWidget {
   final bool loginAfterSignUp;
   final bool hideProvidersTitle;
   final LoginUserType userType;
+  final emailRetryInterval;
+  final onSend;
 
   @override
   _LoginCardState createState() => _LoginCardState();
@@ -336,6 +340,8 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       focusNode: _emailConfirmationFocusNode,
       onFieldSubmitted: (value) => _submit(),
       loginTheme: loginTheme,
+      emailRetryInterval: widget.emailRetryInterval,
+      onSend: widget.onSend,
     );
   }
 
