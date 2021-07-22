@@ -257,21 +257,22 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     Auth auth,
   ) {
     return AnimatedTextFormField(
-      controller: _nameController,
-      width: width,
-      loadingController: _loadingController,
-      interval: _nameTextFieldLoadingAnimationInterval,
-      labelText: messages.userHint,
-      autofillHints: [TextFieldUtils.getAutofillHints(widget.userType)],
-      prefixIcon: Icon(FontAwesomeIcons.solidUserCircle),
-      keyboardType: TextFieldUtils.getKeyboardType(widget.userType),
-      textInputAction: TextInputAction.next,
-      onFieldSubmitted: (value) {
-        FocusScope.of(context).requestFocus(_passwordFocusNode);
-      },
-      validator: widget.userValidator,
-      onSaved: (value) => auth.email = value!,
-    );
+        controller: _nameController,
+        width: width,
+        loadingController: _loadingController,
+        interval: _nameTextFieldLoadingAnimationInterval,
+        labelText: messages.userHint,
+        autofillHints: [TextFieldUtils.getAutofillHints(widget.userType)],
+        prefixIcon: Icon(FontAwesomeIcons.solidUserCircle),
+        keyboardType: TextFieldUtils.getKeyboardType(widget.userType),
+        textInputAction: TextInputAction.next,
+        onFieldSubmitted: (value) {
+          FocusScope.of(context).requestFocus(_passwordFocusNode);
+        },
+        validator: widget.userValidator,
+        onSaved: (value) {
+          auth.email = value!;
+        });
   }
 
   Widget _buildPasswordField(double width, LoginMessages messages, Auth auth) {
@@ -329,20 +330,26 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
   Widget _buildConfirmEmailField(
       double width, LoginMessages messages, Auth auth, LoginTheme loginTheme) {
     return AnimatedEmailFormField(
-      animatedWidth: width,
-      enabled: auth.isSignup,
-      loadingController: _loadingController,
-      inertiaController: _postSwitchAuthController,
-      inertiaDirection: TextFieldInertiaDirection.right,
-      labelText: '邮箱验证码',
-      controller: _emailConfirmationController,
-      textInputAction: TextInputAction.done,
-      focusNode: _emailConfirmationFocusNode,
-      onFieldSubmitted: (value) => _submit(),
-      loginTheme: loginTheme,
-      emailRetryInterval: widget.emailRetryInterval,
-      onSend: widget.onSend,
-    );
+        animatedWidth: width,
+        enabled: auth.isSignup,
+        loadingController: _loadingController,
+        inertiaController: _postSwitchAuthController,
+        inertiaDirection: TextFieldInertiaDirection.right,
+        labelText: '邮箱验证码',
+        controller: _emailConfirmationController,
+        textInputAction: TextInputAction.done,
+        focusNode: _emailConfirmationFocusNode,
+        onFieldSubmitted: (value) => _submit(),
+        loginTheme: loginTheme,
+        emailRetryInterval: widget.emailRetryInterval,
+        onSaved: (value) => auth.emailConfirmation = value!,
+        onSend: (BoolWrapper boolWrapper) async {
+          if (!_formKey.currentState!.validate()) {
+            boolWrapper.value = false;
+            return;
+          }
+          await widget.onSend(_nameController!.value.text);
+        });
   }
 
   Widget _buildForgotPassword(ThemeData theme, LoginMessages messages) {

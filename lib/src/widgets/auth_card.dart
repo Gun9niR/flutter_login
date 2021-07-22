@@ -44,7 +44,7 @@ class AuthCard extends StatefulWidget {
     this.hideSignUpButton = false,
     this.loginAfterSignUp = true,
     this.hideProvidersTitle = false,
-    @required this.emailRetryInterval,
+    this.emailRetryInterval = 30,
     @required this.onSend,
   }) : super(key: key);
 
@@ -59,7 +59,7 @@ class AuthCard extends StatefulWidget {
   final bool loginAfterSignUp;
   final LoginUserType userType;
   final bool hideProvidersTitle;
-  final emailRetryInterval;
+  final int emailRetryInterval;
   final onSend;
 
   @override
@@ -321,6 +321,8 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
                     hideForgotPasswordButton: widget.hideForgotPasswordButton,
                     loginAfterSignUp: widget.loginAfterSignUp,
                     hideProvidersTitle: widget.hideProvidersTitle,
+                    emailRetryInterval: widget.emailRetryInterval,
+                    onSend: widget.onSend,
                   ),
                 )
               : _RecoverCard(

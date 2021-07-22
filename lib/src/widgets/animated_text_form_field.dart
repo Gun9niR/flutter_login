@@ -454,7 +454,6 @@ class _TimerButtonState extends State<TimerButton> {
 
   @override
   void initState() {
-    print(_focusNode);
     super.initState();
     _listener = () {
       setState(() {
@@ -499,11 +498,20 @@ class _TimerButtonState extends State<TimerButton> {
       roundLoadingShape: false,
       onTap: (startTimer, btnState) {
         if (btnState == ButtonState.Idle) {
-          startTimer(widget._emailRetryInterval);
-          widget._onSend();
+          var boolWrapper = BoolWrapper(true);
+          widget._onSend(boolWrapper);
+          if (boolWrapper.value) {
+            startTimer(widget._emailRetryInterval);
+          }
         }
       },
       child: Icon(Icons.send, size: 25, color: _buttonColor),
     );
   }
+}
+
+class BoolWrapper {
+  bool value;
+
+  BoolWrapper(this.value);
 }

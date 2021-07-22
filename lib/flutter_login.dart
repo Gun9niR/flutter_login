@@ -253,7 +253,7 @@ class FlutterLogin extends StatefulWidget {
       this.passwordTooShortHint = 'Password too short!',
       this.invalidEmailHint = 'Invalid email!',
       this.hideProvidersTitle = false,
-      this.emailRetryInterval = 5,
+      this.emailRetryInterval = 30,
       @required this.onSend})
       : super(key: key);
 

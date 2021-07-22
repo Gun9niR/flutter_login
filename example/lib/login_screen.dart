@@ -205,6 +205,9 @@ class LoginScreen extends StatelessWidget {
         // Show new password dialog
       },
       showDebugButtons: true,
+      onSend: (email) {
+        print(email);
+      },
     );
   }
 }
