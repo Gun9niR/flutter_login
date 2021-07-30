@@ -517,4 +517,3 @@ class BoolWrapper {
 
   BoolWrapper(this.value);
 }
-：
