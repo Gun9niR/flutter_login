@@ -343,12 +343,15 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
         loginTheme: loginTheme,
         emailRetryInterval: widget.emailRetryInterval,
         onSaved: (value) => auth.emailConfirmation = value!,
-        onSend: (BoolWrapper boolWrapper) async {
+        onSend: (BoolWrapper boolWrapper, Function callback) async {
           if (!_formKey.currentState!.validate()) {
             boolWrapper.value = false;
             return;
           }
-          await widget.onSend(_nameController!.value.text);
+          await widget.onSend(
+            _nameController!.value.text,
+            callback,
+          );
         });
   }
 
