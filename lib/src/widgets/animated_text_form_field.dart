@@ -500,7 +500,7 @@ class _TimerButtonState extends State<TimerButton> {
         if (btnState == ButtonState.Idle) {
           var boolWrapper = BoolWrapper(true);
           widget._onSend(boolWrapper, () {
-            startTimer(0.1);
+            startTimer(1);
           });
           if (boolWrapper.value) {
             startTimer(widget._emailRetryInterval);
