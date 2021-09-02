@@ -35,7 +35,7 @@ Flushbar showErrorToast(BuildContext context, String title, String message) {
     ),
     duration: const Duration(seconds: 4),
     backgroundGradient: LinearGradient(
-      colors: [Colors.red[600]!, Colors.red[400]!],
+      colors: [Color.fromRGBO(5, 56, 107, 1), Color.fromRGBO(5, 56, 107, 1)],
     ),
     onTap: (flushbar) => flushbar.dismiss(),
   )..show(context);
