@@ -233,6 +233,7 @@ class FlutterLogin extends StatefulWidget {
       required this.onSignup,
       required this.onLogin,
       required this.onRecoverPassword,
+      this.backgroundImage,
       this.title,
       this.logo,
       this.messages,
@@ -336,6 +337,8 @@ class FlutterLogin extends StatefulWidget {
   final int emailRetryInterval;
 
   final onSend;
+
+  final AssetImage? backgroundImage;
 
   /// Hide the title above the login providers. If no providers are set this is uneffective
   final bool hideProvidersTitle;
@@ -646,14 +649,23 @@ class _FlutterLoginState extends State<FlutterLogin>
         backgroundColor: Colors.transparent,
         body: Stack(
           children: <Widget>[
-            GradientBox(
-              colors: [
-                loginTheme.pageColorLight ?? theme.primaryColor,
-                loginTheme.pageColorDark ?? theme.primaryColorDark,
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+            widget.backgroundImage == null
+                ? GradientBox(
+                    colors: [
+                      loginTheme.pageColorLight ?? theme.primaryColor,
+                      loginTheme.pageColorDark ?? theme.primaryColorDark,
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  )
+                : Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: widget.backgroundImage!,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
             SingleChildScrollView(
               child: Theme(
                 data: theme,
